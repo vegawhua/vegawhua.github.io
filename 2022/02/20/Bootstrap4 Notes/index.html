@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title> | Vega's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="/css/dark.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/normalize.css/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Vega's Blog</h1><a id="logo" href="/.">Vega's Blog</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title"></h1><div class="post-meta">2022-02-20</div><div class="post-content"><p>title: CSS Notes<br>tags: Web<br>categories: Web Development<br>description: Learning Notes<br>toc: true</p>
+<h1 id="Introduction-to-Bootstrap"><a href="#Introduction-to-Bootstrap" class="headerlink" title="Introduction to Bootstrap"></a>Introduction to Bootstrap</h1><h2 id="Concept"><a href="#Concept" class="headerlink" title="Concept"></a>Concept</h2><p>A bunch of code that was written to be <strong>reusable</strong> that you can drop into your site, making design easier.</p>
+<p>一个popular的前端UI框架 - CSS</p>
+<p>Pros:</p>
+<ul>
+<li>make websites being more <strong>responsive</strong> - An adaptable layout</li>
+<li>Lots of <strong>pre-styled elements</strong> can be simply dropped into the website.</li>
+</ul>
+<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><ol>
+<li><strong>Direct HTML link</strong></li>
+</ol>
+<p>   <code>&lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot; integrity=&quot;sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3&quot; crossorigin=&quot;anonymous&quot;&gt;</code></p>
+<ol start="2">
+<li><p>Starter template on <a target="_blank" rel="noopener" href="https://getbootstrap.com/docs/5.1/getting-started/introduction/">Bootstrap</a></p>
+</li>
+<li><p><del>Download .zip file on Bootstrap - latency</del></p>
+</li>
+</ol>
+<h2 id="Web-design-at-first"><a href="#Web-design-at-first" class="headerlink" title="Web design at first"></a>Web design at first</h2><p><strong>Wireframing</strong>: a <strong>low fidelity</strong> representation of your design 您的设计的低保真表示</p>
+<p><strong>Mock-up</strong>: a <strong>high fidelity</strong> representation of your design 您的设计的高保真表示</p>
+<p>建议使用原型设计工具：</p>
+<ol>
+<li>Axure</li>
+<li>Sketch - app比较好使</li>
+</ol>
+<p>在线工具：<a target="_blank" rel="noopener" href="https://balsamiq.cloud/">Balsamiq</a></p>
+<h2 id="Navbar"><a href="#Navbar" class="headerlink" title="Navbar"></a>Navbar</h2><p>Guidance on <a target="_blank" rel="noopener" href="https://getbootstrap.com/docs/5.1/components/navbar/">Bootstrap&#x2F;Components&#x2F;Navbar</a></p>
+<h2 id="Tindog-Project"><a href="#Tindog-Project" class="headerlink" title="Tindog Project"></a>Tindog Project</h2><blockquote>
+<p>section vs. div: <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38922435/article/details/80465989">html5中的div和section, article, aside的用法</a></p>
+</blockquote>
+<p>关于CSS link的顺序：</p>
+<ul>
+<li>Bootstrap CSS link <strong>MUST go BEFORE</strong> your own CSS - 自己的css一定要放最后</li>
+<li>css文件放head里面，防止布局错乱；**<a target="_blank" rel="noopener" href="https://ask.csdn.net/questions/211039">浏览器从上到下解析</a>**</li>
+<li>js放body最后，防止js加载慢内容不显示</li>
+</ul>
+<p><strong>Issue:</strong></p>
+<p>Q: 无法将navbar的item右对齐</p>
+<p>A: 根据<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/19733447/bootstrap-navbar-with-left-center-or-right-aligned-items">stackoverflow</a> 的解答，是因为我按照angela的写法写成了<code>ml-auto</code>，但在bootstrap5中，是<code>ms-auto</code></p>
+</div><div class="tags"></div><div class="post-nav"><a class="next" href="/2022/02/19/My-first-Blog/">My first Blog</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://example.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Web-Development/">Web Development</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/Web/" style="font-size: 15px;">Web</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2022/02/20/Bootstrap4%20Notes/">Bootstrap4 Notes</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/19/My-first-Blog/">My first Blog</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/19/CSS%20Note/">CSS Notes</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/19/hello-world/">Hello World</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.linkedin.com/in/vega-huang" title="LinkedIn" target="_blank">LinkedIn</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2022 <a href="/." rel="nofollow">Vega's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
