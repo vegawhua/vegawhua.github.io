@@ -1,0 +1,199 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>Deep Learning - ANN Part 1 | Vega's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="/css/dark.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/normalize.css/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Deep Learning - ANN Part 1</h1><a id="logo" href="/.">Vega's Blog</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Deep Learning - ANN Part 1</h1><div class="post-meta">2022-02-20<span> | </span><span class="category"><a href="/categories/DL/">DL</a><a href="/categories/DL/ANN/">ANN</a></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic-concepts"><span class="toc-number">1.</span> <span class="toc-text">Basic concepts</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#The-neuron"><span class="toc-number">1.1.</span> <span class="toc-text">The neuron</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Activation-Function"><span class="toc-number">2.</span> <span class="toc-text">The Activation Function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How-do-Neural-Networks-work"><span class="toc-number">3.</span> <span class="toc-text">How do Neural Networks work?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How-do-Neural-Networks-learn"><span class="toc-number">4.</span> <span class="toc-text">How do Neural Networks learn?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gradient-Descent-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="toc-number">5.</span> <span class="toc-text">Gradient Descent 梯度下降</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Stochastic-Gradient-Descent-%E9%9A%8F%E6%9C%BA%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="toc-number">6.</span> <span class="toc-text">Stochastic Gradient Descent 随机梯度下降</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Backpropagation-%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95"><span class="toc-number">7.</span> <span class="toc-text">Backpropagation 反向传播算法</span></a></li></ol></div></div><div class="post-content"><h2 id="Basic-concepts"><a href="#Basic-concepts" class="headerlink" title="Basic concepts"></a>Basic concepts</h2><h3 id="The-neuron"><a href="#The-neuron" class="headerlink" title="The neuron"></a>The neuron</h3><p>Components: Dendrites树突 –&gt; Neuron神经元 –&gt; Axon轴突</p>
+<ul>
+<li>Dendrites: signal receiver 信号接收</li>
+<li>Axo: signal transmitter 信号发送</li>
+</ul>
+<p>∴ 信号传递的机制称为<strong>突触</strong> synapse - 就是神经网络里里连接神经元的<strong>线</strong></p>
+<hr>
+<p>Input processing</p>
+<p>∵ 值都<strong>类似</strong>， 神经网络更好处理，模型才会更好</p>
+<p>∴ input value needs to be <strong>pre-processing</strong>:</p>
+<ul>
+<li><p><strong>standardize</strong> 标准化 - average &#x3D; 0, variance方差 &#x3D; 1</p>
+</li>
+<li><p><strong>normalize</strong> 归一化 - 基于数据范围，把数据转化为0~1之间的值<br>$$<br>\frac{min} {max-min}<br>$$<br>ref. <a target="_blank" rel="noopener" href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf">Efficient BackProp</a></p>
+</li>
+<li><p>所有值会被<strong>累加</strong>起来 or 乘以<strong>权重值</strong>再累加起来, etc.</p>
+</li>
+</ul>
+<p>Output value can be:</p>
+<ul>
+<li>Continuous (price)</li>
+<li>Binary (will exit yes&#x2F;no)</li>
+<li>Categorical</li>
+</ul>
+<hr>
+<p>Synapses</p>
+<p>All synapses have <strong>weight</strong></p>
+<p>Deciding <strong>Priority</strong>: <strong>Adjust the weight</strong> to decide which neuron is most important and which one is not.</p>
+<p>各种算法基本就是在调参</p>
+<p>Signals进入neuron后：</p>
+<ol>
+<li>计算得出加权和</li>
+<li>运用activation function激活函数</li>
+<li>neuron把signal沿着synapse transfer to the next neuron</li>
+</ol>
+<h2 id="The-Activation-Function"><a href="#The-Activation-Function" class="headerlink" title="The Activation Function"></a>The Activation Function</h2><ol>
+<li><p>Threshold Function 阈值函数 - Y&#x2F;N function</p>
+<p>​    ϕ(x) &#x3D; 1 if x ≥ 0</p>
+<p>​    ϕ(x) &#x3D; 0 if x &lt; 0</p>
+<p>Result: <code>Yes</code> or <code>No</code></p>
+</li>
+<li><p>Sigmoid Funtion<br>$$<br>\phi(x) &#x3D; \frac{1}{1+e^{-x}}<br>$$<br>x是输入加权和</p>
+<p>​    输入值 &lt; 0， 输出趋近于0 –&gt; 放弃这个输入</p>
+<p>​    输入值 &gt; 0， 输出趋近于1 –&gt; 通过这个输入</p>
+<p>比阈值函数Smooth，擅长预测可能性（概率）</p>
+</li>
+<li><p><strong>Rectifier</strong> Function 整流函数</p>
+<p>​    输入值 &lt; 0，输出 &#x3D; 0</p>
+<p>​    输入值 ≥ 0，输出会随着输入值增加而<strong>逐渐增加</strong></p>
+<p>ref. [<a target="_blank" rel="noopener" href="http://jmlr.org/proceedings/papers/v15/glorot11a/glorot11a.pdf">Deep sparse rectifier neural networks</a>]</p>
+</li>
+<li><p>Hyperbolic tangent Function 双曲正切函数 - 很像Sigmoid<br>$$<br>\phi(x) &#x3D; \frac{1 - e^{-2x}}{1 + e^{-2x}}<br>$$</p>
+</li>
+</ol>
+<p>常用<strong>预测概率值</strong>的组合：</p>
+<p>Hidden layer –&gt; Rectifier</p>
+<p>Output layer –&gt; Sigmoid</p>
+<h2 id="How-do-Neural-Networks-work"><a href="#How-do-Neural-Networks-work" class="headerlink" title="How do Neural Networks work?"></a>How do Neural Networks work?</h2><p>最基本的神经网络结构 - 已经可以完成大部分ML算法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A(Area feet^2) --&gt;E(calculate)</span><br><span class="line">    B(Bedrooms) --&gt; E(calculate)</span><br><span class="line">    C(Distance to city miles) --&gt; E(calculate)</span><br><span class="line">    D(Age) --&gt; E(calculate)</span><br><span class="line">    E(calculate) --Price=w1*x1+w2*x2+w3*x3+w4*x4--&gt; F(price)</span><br></pre></td></tr></table></figure>
+
+<p><strong>添加Hidden layer可以提高NN预测准确率，变得更为强大</strong></p>
+<ul>
+<li>每个神经元认为重要的输入是<em>不同</em>的，以提取<em>不同</em>的<strong>联系</strong></li>
+<li>每个神经元结合多个参数得到一个新参数 - 更加准确</li>
+<li>神经元还可能发现我们不曾发现的自变量之间的<strong>新关联</strong></li>
+</ul>
+<p>∴ Hidden layer提高了NN的灵活性，让NN可以寻找那些特别的特征并把他们结合起来考虑。</p>
+<h2 id="How-do-Neural-Networks-learn"><a href="#How-do-Neural-Networks-learn" class="headerlink" title="How do Neural Networks learn?"></a>How do Neural Networks learn?</h2><ol>
+<li><p>hard-coded coding 硬编码 - 常规SE</p>
+<p>把特殊规则和想要的输出直接告诉程序，带领它的整个运行过程，并指定程序可能要处理的各种情况。</p>
+</li>
+<li><p><strong>Mechanism</strong></p>
+<p>建立神经网络，告诉它哪个是输入哪个是输出，然后让机器自己去寻找确定其它的规则。</p>
+</li>
+</ol>
+<p>Learning process - <strong>Backpropogation反向传播算法</strong>:</p>
+<ol>
+<li>Compare ŷ to y</li>
+<li><strong>Loss fucntion损失函数计算差值</strong>  $C &#x3D; \frac{1}{2}(\hat{y}-y)^2$</li>
+<li>将损失函数的结果<strong>反馈</strong>给NN，</li>
+<li>为了<strong>最小化损失函数</strong>，差值结果被传递到了<strong>权重</strong>部分，权重因此被<strong>更新</strong></li>
+</ol>
+<p>ref. [<a target="_blank" rel="noopener" href="http://stats.stackexchange.com/questions/154879/a-list-of-cost-functions-used-in-neural-networks-alongside-applications">A list of cost functions used in neural networks, alongside applications</a>]</p>
+<p>交叉验证 &#x2F; 损失函数</p>
+<hr>
+<p>A basic NN example:</p>
+<p>Feedforward neural network单层前馈神经网络 &#x3D; perceptron感知机 （cr. Frank Rosenblatt)</p>
+<p>只有一层hidden layer</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A(X1) --&gt;E(加权求和)</span><br><span class="line">    B(X2) --&gt; E(加权求和)</span><br><span class="line">    C(Xm) --&gt; E(加权求和)</span><br><span class="line">    E(加权求和) --activation functions--&gt; F(ŷ)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>y是真实世界的真实值，ŷ代表输出值，是由NN和算法预测的值</p>
+</blockquote>
+<p>A multiple rows example:</p>
+<blockquote>
+<p>epoch:  <em>epoch是</em>一个单位。 一个epoch表示学习中<strong>所有</strong>训练数据均<strong>被使用过一次</strong>时的<strong>更新次数</strong>。</p>
+</blockquote>
+<p>损失函数是<strong>所有差值</strong>的平方和的二分之一 $C &#x3D; \Sigma \frac{1}{2}(\hat{y}-y)^2$</p>
+<h2 id="Gradient-Descent-梯度下降"><a href="#Gradient-Descent-梯度下降" class="headerlink" title="Gradient Descent 梯度下降"></a>Gradient Descent 梯度下降</h2><p>用途：最小化损失函数</p>
+<p>方法：</p>
+<ol>
+<li><p>简单匹配算法</p>
+<p>画个图很容易发现最低点，但是随着<strong>权重数目</strong>的增加，NN里的<strong>突触数目</strong>也会增加，会引发维数灾难<strong>Curse of Dimensionality</strong></p>
+<p>e.g. 25个weight –&gt; 就算全世界最快的计算机，也要计算$3.42 \times 10^{50}$年，是<strong>绝对不可能</strong>的。</p>
+</li>
+<li><p><strong>Gradient Descent</strong></p>
+<ol>
+<li><p>从曲线上的某一点开始</p>
+</li>
+<li><p>求导，找出那一点的斜率<strong>slope</strong>，并确定<strong>正负</strong>：负的往下（右）走，正的往上（左）走</p>
+</li>
+<li><p>重复计算，移动点</p>
+</li>
+<li><p>直到找到最优权重</p>
+<blockquote>
+<p>Q: 为什么话超下走不会朝上走，不会跳出损失函数的曲线？</p>
+<p>A: 依赖于<strong>参数调节</strong>，之后会说到</p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="Stochastic-Gradient-Descent-随机梯度下降"><a href="#Stochastic-Gradient-Descent-随机梯度下降" class="headerlink" title="Stochastic Gradient Descent 随机梯度下降"></a>Stochastic Gradient Descent 随机梯度下降</h2><p>需要它的原因：</p>
+<p>梯度下降要求损失函数<strong>必须是凹函数</strong>，因此可以得到正确的权重；但当我们的损失函数<strong>不是凹函数</strong>时，比如我们选择的损失函数虽然是凹函数但是在<strong>多维空间</strong>里他会转换成<strong>非凹函数</strong>。这种情况下找到的是损失函数的一个<strong>局部最小值</strong>，而不是全局最小值，会得到<strong>错误的权重</strong>。</p>
+<p>所以这种时候，需要<strong>随机梯度下降</strong>。</p>
+<p>随机梯度下降<strong>避免</strong>了<strong>选中局部极值</strong>。</p>
+<ul>
+<li>因为它可以包容这种波动，它一次只做一次迭代，因而计算过程中波动就会大很多，就更有可能找到全局最小值global minimum而不是局部的。</li>
+</ul>
+<p>梯度下降 vs. 随机梯度下降</p>
+<p><strong>工作机制差异</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">梯度下降</th>
+<th>随机梯度下降</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">batch，运行了NN上所有行的数据后再调整权重</td>
+<td>运行一行数据就调整对应的权重，重复</td>
+</tr>
+<tr>
+<td align="left">需要把所有data都上载到ram里才可以运行</td>
+<td>不需要把all data都上载到ram里再运行，速度更快</td>
+</tr>
+<tr>
+<td align="left">确定性算法，只要NN权重的初始值一样，每次梯度下降都会有一样的结果</td>
+<td>随机算法，即使初始值一样，因为不同的训练过程，每次随机梯度下降结果会随机</td>
+</tr>
+</tbody></table>
+<hr>
+<p>Mini batch gradient descent 小批量梯度下降</p>
+<p>结合normal和随机的优点，可以自己设置每次运行多少行数后调整权重</p>
+<p>ref. </p>
+<p>梯度下降[<a target="_blank" rel="noopener" href="https://iamtrask.github.io/2015/07/27/python-network-part2/">A Neural Network in 13 lines of Python (Part 2 – Gradient Descent)</a>]</p>
+<p>算法的数学机制 [<a target="_blank" rel="noopener" href="http://neuralnetworksanddeeplearning.com/chap2.html">Neural Networks and Deep Learning</a>]</p>
+<h2 id="Backpropagation-反向传播算法"><a href="#Backpropagation-反向传播算法" class="headerlink" title="Backpropagation 反向传播算法"></a>Backpropagation 反向传播算法</h2><p>计算损失函数反馈给NN的权重部分调整权重就是Backpropagation</p>
+<p>核心&amp;基础&amp;优势：</p>
+<p>由于这个算法的结构特点，能够使我们<strong>同时调整所有的权重</strong>，这样就能知道<strong>哪一部分误差是由NN的哪个权重引起的</strong>。</p>
+<p>Training the ANN with Stochastic Gradient Descent</p>
+<ol>
+<li><p>Randomly initialise the weights to small numbers close to 0 (but not 0).</p>
+<p>赋予权重接近0但不是0的很小的随机数 - <strong>权重的初始值</strong></p>
+</li>
+<li><p>Input the first observation of your dataset in the input layer. Each feature is in one input node.</p>
+<p>在输入层中输入数据集的第一个观察值。每个特征都在一个输入节点中。</p>
+</li>
+<li><p>Forward-Propagation前向传播: <strong>from left to right</strong>, the neurons are activated in a way that the impact of each neuron’s activation is limited by the weights. Propagate the activations until getting the predicted result ŷ.</p>
+<p><strong>从左到右</strong>，神经元被激活的方式是每个神经元激活的影响受到权重的限制。传播激活直到得到预测结果 ŷ。</p>
+</li>
+<li><p>Compare the predicted result ŷ to the actual result y. Measure the generated error.</p>
+<p>比较预测值ŷ和真实值y，计算误差。</p>
+</li>
+<li><p><strong>Back-Propagation</strong>反向传播: <strong>from right to left</strong>, the error is back-propagated. Update the weights according to how much they are responsible for the error. The <strong>learning rate</strong> decides by how much we update the weights.</p>
+<p><strong>从右到左</strong>，误差是反向传播的。根据他们对错误负责的程度更新权重。<strong>学习率</strong>取决于我们<strong>对权重进行了多少调整</strong>。</p>
+<blockquote>
+<p>learning rate学习率就是NN中可以控制的一个<strong>参数</strong></p>
+</blockquote>
+</li>
+<li><p>Repeat Steps 1 to 5 and update the weights after each observation (<strong>Reinforcement Learning</strong>). Or: Repeat Steps 1 to 5 but update the weights only after a batch of observations (<strong>Batch Learning</strong>).</p>
+<p>重复步骤 1 到 5，并在<strong>每次</strong>观察后更新权重（<strong>强化学习</strong>）</p>
+<p>或者：</p>
+<p>重复步骤 1 到 5，但<strong>仅在一批</strong>观察后更新权重（<strong>批量学习</strong>）</p>
+</li>
+<li><p>When the whole training set passed through the ANN, that makes an <strong>epoch</strong>. Redo more epochs.</p>
+<p>当整个训练集通过 ANN 时，就形成了一个 <strong>epoch</strong>。继续重做更多的<strong>epoch</strong>。</p>
+</li>
+</ol>
+</div><div class="tags"><a href="/tags/DL/"><i class="fa fa-tag"></i>DL</a></div><div class="post-nav"><a class="next" href="/2022/02/20/DL/">Deep Learning Basic Concepts</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://example.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DL/">DL</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DL/ANN/">ANN</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web-Development/">Web Development</a><span class="category-list-count">2</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/Web/" style="font-size: 15px;">Web</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/DL/" style="font-size: 15px;">DL</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2022/02/20/DL-ANN/">Deep Learning - ANN Part 1</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/20/DL/">Deep Learning Basic Concepts</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/20/Bootstrap4%20Notes/">Bootstrap4 Notes</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/19/My-first-Blog/">My first Blog</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/19/CSS%20Note/">CSS Notes</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/19/hello-world/">Hello World</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.linkedin.com/in/vega-huang" title="LinkedIn" target="_blank">LinkedIn</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2022 <a href="/." rel="nofollow">Vega's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
