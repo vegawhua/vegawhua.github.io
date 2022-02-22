@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>ANN Building | Vega's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="/css/dark.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/normalize.css/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.0.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">ANN Building</h1><a id="logo" href="/.">Vega's Blog</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">ANN Building</h1><div class="post-meta">2022-02-21<span> | </span><span class="category"><a href="/categories/DL/">DL</a><a href="/categories/DL/ANN/">ANN</a></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">Contents</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Preparation"><span class="toc-number">1.</span> <span class="toc-text">Preparation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Data-Preprocessing"><span class="toc-number">2.</span> <span class="toc-text">Data Preprocessing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-ANN-model"><span class="toc-number">3.</span> <span class="toc-text">Creating ANN model</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Task"><span class="toc-number">4.</span> <span class="toc-text">Task</span></a></li></ol></div></div><div class="post-content"><h2 id="Preparation"><a href="#Preparation" class="headerlink" title="Preparation"></a>Preparation</h2><ul>
+<li><p>Install Theano <code>pip3 install theano</code>：</p>
+<ul>
+<li><p>开源数值计算库，适用于<font color="red">快速数值计算</font>，因为它与<code>NumPy</code>紧密整合。</p>
+</li>
+<li><p>可以在CPU和GPU上运行（处理Graphic Task）</p>
+<blockquote>
+<p>GPU更适用于<strong>高强度运算</strong>和<strong>并行运算</strong></p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>Install Tensorflow <code>pip3 install tensorflow</code>：</p>
+<ul>
+<li>开源数值计算库，擅长<font color="red">高速计算</font></li>
+<li>可以在CPU和GPU上运行</li>
+</ul>
+</li>
+<li><p>Install Keras<code>conda install -c conda-forge keras</code>：</p>
+<ul>
+<li>非常适合建立DL模型 - 代码少</li>
+<li>在Theano和Tensorflow基础上搭建和运行 - 像sklearn</li>
+</ul>
+</li>
+</ul>
+<p><code>conda update --all</code>：更新所有anaconda内容</p>
+<ul>
+<li>Set right working directory</li>
+</ul>
+<h2 id="Data-Preprocessing"><a href="#Data-Preprocessing" class="headerlink" title="Data Preprocessing"></a>Data Preprocessing</h2><ol>
+<li><p>导入包</p>
+</li>
+<li><p>导入数据集，拆分特征矩阵和因变量向量</p>
+</li>
+<li><p>Encoding categorical data</p>
+<ul>
+<li><p>因为这次因变量已经是1,0了，所以不需要encode</p>
+</li>
+<li><p><code>&#39;categorical_features&#39;</code> 已经被sklearn删掉了</p>
+<p>encoding部分的代码详见<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/59476165/typeerror-init-got-an-unexpected-keyword-argument-categorical-features">stackoverflow</a></p>
+</li>
+<li><p><font color="red">虚拟变量陷阱</font>：不是很懂，需要继续研究</p>
+<p>引入<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%99%9A%E6%8B%9F%E5%8F%98%E9%87%8F">虚拟变量</a>时要求如果有<font color="red">m</font>个定性解释变量，在<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%A8%A1%E5%9E%8B">模型</a>中引入<font color="red">m-1</font>个虚拟变量。否则，如果引入m个<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%99%9A%E6%8B%9F%E5%8F%98%E9%87%8F">虚拟变量</a>，就会导致模型解释变量间出现完全共线性的情况。我们一般称由于引入<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%99%9A%E6%8B%9F%E5%8F%98%E9%87%8F">虚拟变量</a>个数与定性因素个数相同出现的模型无法估计的问题，称为”虚拟变量陷阱”</p>
+<blockquote>
+<p>一开始我以为是处理了国家和性别两个字段，所以虚拟变量应该是2-1&#x3D;1个，但是性别其实是不算的，虚拟变量的个数是指，国家字段里有三个国家，所以虚拟变量就是2个！因此删掉首列。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="Creating-ANN-model"><a href="#Creating-ANN-model" class="headerlink" title="Creating ANN model"></a>Creating ANN model</h2><blockquote>
+<p>要import keras，需要TensorFlow环境</p>
+<p>M1装个TensorFlow真的太累了，根据<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dangui/p/15128418.html">大佬的教程</a>终于搞定了，需要把其他library都重新装一下，anaconda的环境换成TensorFlow安装对应的低版本python。</p>
+</blockquote>
+<ol>
+<li><p><strong>导入包</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> keras</span><br><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> Dense</span><br></pre></td></tr></table></figure>
+
+<p><code>Sequential</code>：顺序模型是多个网络层的线性堆叠。</p>
+<p><code>Dense</code>：<strong>密度函数</strong>，常用的的全连接层。</p>
+</li>
+<li><p><strong>初始化ANN</strong></p>
+<ol>
+<li><font color="red">定义各层的顺序</font>（Recommended）</li>
+<li>定义ANN图形</li>
+</ol>
+</li>
+<li><p><strong>添加ANN的每一层</strong></p>
+<ul>
+<li>首先需要initialise the weights to small numbers close to 0 but not 0 - <code>Dense</code></li>
+<li>选择激活函数 - 输出概率值 - hidden用rectifier，output有sigmoid</li>
+</ul>
+<ol>
+<li><p>Dense定义每一层，是通过<font color="red">定义隐藏层</font>，从而能定义<font color="red">输入层</font></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classifier.add(Dense(activation=<span class="string">&quot;relu&quot;</span>, units=<span class="number">6</span>, kernel_initializer=<span class="string">&quot;uniform&quot;</span>, input_dim = <span class="number">11</span>))</span><br></pre></td></tr></table></figure>
+
+<p><code>activation</code>：hidden使用的激活函数，<code>&#39;relu&#39;</code>指的是rectifier。</p>
+<p><code>units</code>：隐藏层的神经元个数。</p>
+<blockquote>
+<p>Tips: 隐藏层neorun个数 &#x3D; (输入层neorun个数+输出层neorun个数) &#x2F; 2</p>
+<p>或者就需要<code>parameter tuning</code></p>
+</blockquote>
+<p><code>kernel_initializer</code>：Initializer for the <code>kernel</code> weights matrix. <code>&#39;uniform&#39;</code>均值分布</p>
+<p><code>input_dim</code>：输入层的神经元个数。</p>
+</li>
+<li><p>定义第二层hidden</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classifier.add(Dense(activation=<span class="string">&quot;relu&quot;</span>, units=<span class="number">6</span>, kernel_initializer=<span class="string">&quot;uniform&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>不需要<code>input_dim</code>，因为第一层hidden已经指定了input的生成，机器知道第二层需要建在哪儿</p>
+</li>
+<li><p>定义<font color="red">输出层</font></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classifier.add(Dense(activation = <span class="string">&quot;sigmoid&quot;</span>, units = <span class="number">1</span>, kernel_initializer = <span class="string">&quot;uniform&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>tips: <code>sigmoid</code>用在输出<font color="red">1个</font>因变量的情况，<code>softmax</code>适用于输出<font color="red">2个及以上</font>因变量的情况。</p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p><strong>编译ANN</strong> - 对整个ANN应用随机梯度下降算法和二次交叉熵loss function</p>
+<p>对数损失函数 logarithmic loss</p>
+<p>因为因变量是二元的，所以损失函数<font color="red">二元交叉熵</font>binary cross entropy；如果是多元的，损失函数<font color="red">分类交叉熵</font>categorical cross entropy</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classifier.<span class="built_in">compile</span>(optimizer = <span class="string">&quot;adam&quot;</span>, loss = <span class="string">&#x27;binary_crossentropy&#x27;</span>, metrics = [<span class="string">&#x27;accuracy&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p><code>optimizer</code> : str (name of optimizer) or optimizer object.</p>
+<p><code>loss</code>: str(name of objective function) or objective function.</p>
+<p><code>metrics</code>: 是<code>[]</code>，list of metrics to be evaluated by the model.</p>
+</li>
+<li><p><strong>训练ANN</strong> - Training ANN</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classifier.fit(X_train, y_train, batch_size = <span class="number">10</span>, nb_epoch = <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+
+<p><code>batch_size</code>:  Integer or <code>None</code>. Number of samples per gradient update. If unspecified, <code>batch_size</code> will default to 32. </p>
+<p>整数或无。每次梯度更新的样本数。如果未指定，batch_size 将默认为 32。</p>
+<p><code>nb_epoch</code>: Integer. Number of epochs to train the model. An epoch is an iteration over the entire <code>x</code> and <code>y</code> data provided (unless the <code>steps_per_epoch</code> flag is set to something other than None).</p>
+<p>整数。训练模型的时期数。一个epoch是对提供的整个 x 和 y 数据的迭代（除非 steps_per_epoch 标志设置为 None 以外的值）。</p>
+</li>
+<li><p><strong>预测ANN</strong> - Testing ANN</p>
+<p><code>y_pred = classifier.predict(X_test)</code></p>
+</li>
+<li><p><strong>查看模型预测结果</strong> - 混淆矩阵</p>
+<p>因为本来结果是精确数值，需要设置成T&#x2F;F以便于y_test比较得出正确率，所以通过设定阈值可以解决这个问题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y_pred = (y_pred &gt; 0.5)</span><br></pre></td></tr></table></figure>
+
+<p>y_pred: &gt;0.5的就是true，&lt;0.5就是false <code>y_pred = (y_pred &gt; 0.5)</code></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/seagal890/article/details/105059498">混淆矩阵</a>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.metrics import confusion_matrix</span><br><span class="line">cm = confusion_matrix(y_test, y_pred)</span><br></pre></td></tr></table></figure>
+
+<p><img src="file:///Users/vegahuang/Library/Application%20Support/typora-user-images/image-20220222153352893.png?lastModify=1645504832" alt="image-20220222153352893"></p>
+<p>1546+142是预测正确的，263+49是预测错误的</p>
+<p>Accuracy &#x3D; (1546+142)&#x2F;2000 &#x3D; 0.844</p>
+</li>
+</ol>
+<h2 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Predict if the customer with the following information will leave the bank:</span></span><br><span class="line"><span class="string">Geography: France</span></span><br><span class="line"><span class="string">Credit Score: 600</span></span><br><span class="line"><span class="string">Gender: Male</span></span><br><span class="line"><span class="string">Age: 40</span></span><br><span class="line"><span class="string">Tenure: 3</span></span><br><span class="line"><span class="string">Balance: 60000</span></span><br><span class="line"><span class="string">Number of Products: 2</span></span><br><span class="line"><span class="string">Has Credit Card: Yes</span></span><br><span class="line"><span class="string">Is Active Member: Yes</span></span><br><span class="line"><span class="string">Estimated Salary: 50000</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">new_prediction = classifier.predict(sc.transform(np.array([[<span class="number">0.0</span>, <span class="number">0</span>, <span class="number">600</span>, <span class="number">1</span>, <span class="number">40</span>, <span class="number">3</span>, <span class="number">60000</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">50000</span>]])))</span><br><span class="line">new_prediction = (new_prediction &gt; <span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
+
+<p>单值预测流程：</p>
+<ul>
+<li>我们需要把这个客户的信息放进一行：双重中括号，<code>[]</code>意味着括号内的所有内容会以列的形式出现，<code>[[]]</code>就会建立一个二维数组，括号里的内容就会放进这个二维数组的第一行。</li>
+<li>先要确认信息的顺序和X特征矩阵里的feature顺序<font color="red">一致</font></li>
+<li>然后对照已有的X特征矩阵，查看如<code>Geography</code> &#x2F; <code>Gender</code>这种虚拟变量分别对应的值，填入表达式。</li>
+<li>输入的是原始值，所以需要与X_train同样的scaling，直接套用sc进行标准化，第一个int记得携程x.0，这样标准化后转换成float不会报错</li>
+<li>预测，将预测的概率值转换成True&#x2F;False输出预测结果</li>
+</ul>
+</div><div class="tags"><a href="/tags/DL/"><i class="fa fa-tag"></i>DL</a></div><div class="post-nav"><a class="pre" href="/2022/02/21/Data%20preprocessing/">Data preprocessing</a><a class="next" href="/2022/02/20/DL-ANN/">ANN Intuition</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://example.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DL/">DL</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DL/ANN/">ANN</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/ML/">ML</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web-Development/">Web Development</a><span class="category-list-count">2</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/DL/" style="font-size: 15px;">DL</a> <a href="/tags/Web/" style="font-size: 15px;">Web</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/ML/" style="font-size: 15px;">ML</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2022/02/22/ANN-Performance-and-Tuning/">ANN Performance and Tuning</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/21/Data%20preprocessing/">Data preprocessing</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/21/ANN%20Building/">ANN Building</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/20/DL-ANN/">ANN Intuition</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/20/DL/">Deep Learning Basic Concepts</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/20/Bootstrap5%20Notes/">Bootstrap5 Notes</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/19/My-first-Blog/">My first Blog</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/19/CSS%20Note/">CSS Notes</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/02/19/hello-world/">Hello World</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://www.linkedin.com/in/vega-huang" title="LinkedIn" target="_blank">LinkedIn</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2022 <a href="/." rel="nofollow">Vega's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
